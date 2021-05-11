@@ -560,7 +560,7 @@ public final class GCParser {
         cache.setFound(TextUtils.matches(page, GCConstants.PATTERN_FOUND));
 
         // cache type
-        cache.setType(CacheType.getByGuid(TextUtils.getMatch(page, GCConstants.PATTERN_TYPE, true, cache.getType().id)));
+        cache.setType(CacheType.getByWaypointType(TextUtils.getMatch(page, GCConstants.PATTERN_TYPE, true, cache.getType().id)));
 
         // on watchlist
         cache.setOnWatchlist(TextUtils.matches(page, GCConstants.PATTERN_WATCHLIST));
@@ -1910,18 +1910,39 @@ public final class GCParser {
 
     @Nullable
     public static String getUsername(final String page) {
-        final Document document = Jsoup.parse(page);
-
-        // New website top bar
-        final String username = TextUtils.stripHtml(document.select("span.user-name").text());
-        if (StringUtils.isNotEmpty(username)) {
+        final String username = TextUtils.getMatch(page, GCConstants.PATTERN_LOGIN_NAME_LOGIN_PAGE, null);
+        if (StringUtils.isNotBlank(username)) {
             return username;
         }
 
         // Old style webpage fallback
+        final Document document = Jsoup.parse(page);
         final String usernameOld = TextUtils.stripHtml(document.select("span.li-user-info > span:first-child").text());
 
         return StringUtils.isNotEmpty(usernameOld) ? usernameOld : null;
     }
 
+    @Nullable
+    public static int getCachesCount(final String page) {
+        int cachesCount = -1;
+        try {
+            String intStringToParse = removeDotAndComma(TextUtils.getMatch(page, GCConstants.PATTERN_CACHES_FOUND_LOGIN_PAGE, true, ""));
+            if (intStringToParse.isEmpty()) {
+                intStringToParse = removeDotAndComma(TextUtils.getMatch(page, GCConstants.PATTERN_CACHES_FOUND_HEADER, true, ""));
+            }
+            if (!intStringToParse.isEmpty()) {
+                cachesCount = Integer.parseInt(intStringToParse);
+            }
+        } catch (final NumberFormatException e) {
+            Log.e("getLoginStatus: bad cache count", e);
+        }
+
+        return cachesCount;
+
+    }
+
+
+    private static String removeDotAndComma(final String str) {
+        return StringUtils.replaceChars(str, ".,", null);
+    }
 }
