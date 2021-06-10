@@ -13,6 +13,8 @@ public interface ILogin extends IConnector {
      * Contacts the server the connector belongs to and verifies/establishes authentication and retrieves information
      * about the current user (Name, found caches) if applicable.
      *
+     * Should involve {@link cgeo.geocaching.storage.extension.FoundNumCounter#getAndUpdateFoundNum(ILogin)} to store the found count if gathered while login.
+     *
      * @param handler
      *            Handler to receive status feedback
      * @param fromActivity
@@ -49,6 +51,8 @@ public interface ILogin extends IConnector {
      * Number of caches the user has found in this connector.
      * Normally retrieved/updated with {@link #login(Handler, Activity)}.
      * Might be stale as changes on the connectors site are generally not notified.
+     *
+     * Consider using {@link cgeo.geocaching.storage.extension.FoundNumCounter#getAndUpdateFoundNum(ILogin)} instead, which provides cached data if user has no internet connection.
      *
      */
     int getCachesFound();

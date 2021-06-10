@@ -10,13 +10,6 @@ import androidx.appcompat.app.ActionBar;
  */
 public class AbstractActionBarActivity extends AbstractActivity {
 
-    public AbstractActionBarActivity() {
-        super(false);
-    }
-    public AbstractActionBarActivity(final boolean keepScreenOn) {
-        super(keepScreenOn);
-    }
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +21,7 @@ public class AbstractActionBarActivity extends AbstractActivity {
     private void initUpAction() {
        final ActionBar actionBar = getSupportActionBar();
        if (actionBar != null) {
-           actionBar.setDisplayHomeAsUpEnabled(true);
+           actionBar.setDisplayHomeAsUpEnabled(!isTaskRoot());
        }
     }
 

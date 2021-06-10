@@ -3,11 +3,13 @@ package cgeo.geocaching.maps;
 import cgeo.geocaching.Intents;
 import cgeo.geocaching.R;
 import cgeo.geocaching.SearchResult;
+import cgeo.geocaching.activity.ActivityMixin;
 import cgeo.geocaching.enumerations.WaypointType;
 import cgeo.geocaching.list.StoredList;
 import cgeo.geocaching.location.Geopoint;
 import cgeo.geocaching.settings.Settings;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -109,4 +111,10 @@ public class MapOptions {
         fromActivity.startActivity(newIntent(fromActivity, cls));
     }
 
+    public void startIntentWithoutTransition(final Activity fromActivity, final Class<?> cls) {
+        startIntent(fromActivity, cls);
+
+        // avoid weired transitions
+        ActivityMixin.overrideTransitionToFade(fromActivity);
+    }
 }

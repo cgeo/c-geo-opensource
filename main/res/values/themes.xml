@@ -11,6 +11,7 @@
         <!-- UX component styles -->
         <item name="checkboxStyle">@style/checkboxStyle</item>
         <item name="radioButtonStyle">@style/radioButtonStyle</item>
+        <item name="badgeStyle">@style/badgeStyle</item>
         <item name="materialAlertDialogTheme">@style/materialAlertDialogTheme</item>
         <item name="android:spinnerStyle">@style/spinnerStyle</item>
 

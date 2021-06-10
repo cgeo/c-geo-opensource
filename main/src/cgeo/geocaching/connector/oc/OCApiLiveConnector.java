@@ -23,6 +23,7 @@ import cgeo.geocaching.models.Geocache;
 import cgeo.geocaching.sensors.Sensors;
 import cgeo.geocaching.settings.Settings;
 import cgeo.geocaching.storage.DataStore;
+import cgeo.geocaching.storage.extension.FoundNumCounter;
 import cgeo.geocaching.utils.CryptUtils;
 import cgeo.geocaching.utils.Log;
 
@@ -162,6 +163,9 @@ public class OCApiLiveConnector extends OCApiConnector implements ISearchByCente
         } else {
             userInfo = new UserInfo(StringUtils.EMPTY, 0, UserInfoStatus.NOT_SUPPORTED);
         }
+        // update cache counter
+        FoundNumCounter.getAndUpdateFoundNum(this);
+
         return userInfo.getStatus() == UserInfoStatus.SUCCESSFUL;
     }
 

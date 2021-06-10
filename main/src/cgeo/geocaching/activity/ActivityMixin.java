@@ -224,4 +224,8 @@ public final class ActivityMixin {
         }
         return true;
     }
+
+    public static void overrideTransitionToFade(final Activity activity) {
+        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
 }

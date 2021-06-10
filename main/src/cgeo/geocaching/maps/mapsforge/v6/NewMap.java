@@ -10,12 +10,13 @@ import cgeo.geocaching.Intents;
 import cgeo.geocaching.R;
 import cgeo.geocaching.SearchResult;
 import cgeo.geocaching.WaypointPopup;
-import cgeo.geocaching.activity.AbstractActionBarActivity;
+import cgeo.geocaching.activity.AbstractBottomNavigationActivity;
 import cgeo.geocaching.activity.ActivityMixin;
 import cgeo.geocaching.activity.FilteredActivity;
 import cgeo.geocaching.connector.gc.GCMap;
 import cgeo.geocaching.connector.gc.Tile;
 import cgeo.geocaching.connector.internal.InternalConnector;
+import cgeo.geocaching.databinding.MapMapsforgeV6Binding;
 import cgeo.geocaching.downloader.DownloaderUtils;
 import cgeo.geocaching.enumerations.CacheListType;
 import cgeo.geocaching.enumerations.CacheType;
@@ -140,8 +141,7 @@ import org.mapsforge.map.model.common.Observer;
 
 @SuppressLint("ClickableViewAccessibility")
 @SuppressWarnings("PMD.ExcessiveClassLength") // This is definitely a valid issue, but can't be refactored in one step
-public class NewMap extends AbstractActionBarActivity implements Observer, FilteredActivity {
-
+public class NewMap extends AbstractBottomNavigationActivity implements Observer, FilteredActivity {
     private static final String STATE_INDIVIDUAlROUTEUTILS = "indrouteutils";
     private static final String STATE_TRACKUTILS = "trackutils";
 
@@ -257,7 +257,9 @@ public class NewMap extends AbstractActionBarActivity implements Observer, Filte
         // set layout
         ActivityMixin.setTheme(this);
 
-        setContentView(R.layout.map_mapsforge_v6);
+        // init BottomNavigationController to add the bottom navigation to the layout
+        setContentView(MapMapsforgeV6Binding.inflate(getLayoutInflater()).getRoot());
+
         setTitle();
         this.mapAttribution = findViewById(R.id.map_attribution);
 
@@ -341,6 +343,11 @@ public class NewMap extends AbstractActionBarActivity implements Observer, Filte
 
         initMyLocationSwitchButton(MapProviderFactory.createLocSwitchMenuItem(this, menu));
         return result;
+    }
+
+    @Override
+    public int getSelectedBottomItemId() {
+        return MENU_MAP;
     }
 
     @Override
@@ -434,6 +441,7 @@ public class NewMap extends AbstractActionBarActivity implements Observer, Filte
             this.renderThemeHelper.selectMapThemeOptions();
         } else if (id == R.id.menu_as_list) {
             CacheListActivity.startActivityMap(this, new SearchResult(caches.getVisibleCacheGeocodes()));
+            ActivityMixin.overrideTransitionToFade(this);
         } else if (id == R.id.menu_hint) {
             menuShowHint();
         } else if (id == R.id.menu_compass) {
@@ -595,7 +603,7 @@ public class NewMap extends AbstractActionBarActivity implements Observer, Filte
     private void mapRestart() {
         mapOptions.mapState = currentMapState();
         finish();
-        mapOptions.startIntent(this, Settings.getMapProvider().getMapClass());
+        mapOptions.startIntentWithoutTransition(this, Settings.getMapProvider().getMapClass());
     }
 
     /**
