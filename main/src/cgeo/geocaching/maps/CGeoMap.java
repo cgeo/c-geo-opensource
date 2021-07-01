@@ -11,6 +11,7 @@ import cgeo.geocaching.activity.Progress;
 import cgeo.geocaching.connector.ConnectorFactory;
 import cgeo.geocaching.connector.gc.GCMap;
 import cgeo.geocaching.connector.gc.Tile;
+import cgeo.geocaching.databinding.MapGoogleBinding;
 import cgeo.geocaching.downloader.DownloaderUtils;
 import cgeo.geocaching.enumerations.CacheType;
 import cgeo.geocaching.enumerations.CoordinatesType;
@@ -567,7 +568,8 @@ public class CGeoMap extends AbstractMap implements ViewFactory, OnCacheTapListe
             this.lastNavTarget = mapOptions.mapState.getLastNavTarget();
         }
 
-        activity.setContentView(mapProvider.getMapLayoutId());
+        // init BottomNavigationController to add the bottom navigation to the layout
+        activity.setContentView(MapGoogleBinding.inflate(activity.getLayoutInflater()).getRoot());
 
         // map settings popup
         activity.findViewById(R.id.map_settings_popup).setOnClickListener(v ->
@@ -582,7 +584,6 @@ public class CGeoMap extends AbstractMap implements ViewFactory, OnCacheTapListe
 
         // set layout
         ActivityMixin.setTheme(activity);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle();
 
@@ -809,6 +810,7 @@ public class CGeoMap extends AbstractMap implements ViewFactory, OnCacheTapListe
             //this will never happen, Google does not support mapsforge themes -> do nothing
         } else if (id == R.id.menu_as_list) {
             CacheListActivity.startActivityMap(activity, new SearchResult(getGeocodesForCachesInViewport()));
+            ActivityMixin.overrideTransitionToFade(activity);
         } else if (id == R.id.menu_hint) {
             menuShowHint();
         } else if (id == R.id.menu_compass) {
@@ -1016,7 +1018,7 @@ public class CGeoMap extends AbstractMap implements ViewFactory, OnCacheTapListe
     private void mapRestart() {
         mapOptions.mapState = currentMapState();
         activity.finish();
-        mapOptions.startIntent(activity, Settings.getMapProvider().getMapClass());
+        mapOptions.startIntentWithoutTransition(activity, Settings.getMapProvider().getMapClass());
     }
 
     /**

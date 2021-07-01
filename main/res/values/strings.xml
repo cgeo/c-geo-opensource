@@ -336,7 +336,7 @@
     <string name="menu_update">Update</string>
     <string name="menu_update_routingdata">Routing data</string>
     <string name="menu_update_mapdata">Map data</string>
-    <string name="menu_history">History</string>
+    <string name="menu_history">Find history</string>
     <string name="menu_filter">Filter</string>
     <string name="menu_scan_geo">Scan geocode</string>
     <string name="menu_lists_pocket_queries">Lists / pocket queries</string>
@@ -348,6 +348,7 @@
     <string name="advanced_search_button">Search</string>
     <string name="stored_caches_button">Stored</string>
     <string name="any_button">Go to</string>
+    <string name="more_button">More</string>
     <string name="unknown_scan">Didn\'t find any geocodes in the scan result.</string>
 
     <!-- caches -->
@@ -447,6 +448,8 @@
     <string name="caches_set_listmarker">Set list marker</string>
     <string name="select_icon">Select icon</string>
     <string name="onetime_missing_unicode_info">Your Android version does not support automatic detection of icons supported - some characters may be missing</string>
+    <string name="user_finds">%d finds</string>
+    <string name="user_finds_offline">%d logged offline</string>
 
     <!-- caches lists -->
     <string name="menu_lists">Manage lists</string>
@@ -739,6 +742,7 @@
     <string name="init_login_popup_failed">Login failed</string>
     <string name="init_login_popup_failed_reason">Login failed: %s</string>
     <string name="init_login_popup_not_authorized">Not authorized</string>
+    <string name="init_login_popup_not_logged_in">Not logged in</string>
     <string name="init_login_popup_invalid_timestamp">Local time invalid, adjust device time</string>
     <string name="init_login_popup_invalid_token">Authorization invalid, re-authorize</string>
     <string name="init_authorization_credential_username">Username</string>
@@ -2393,5 +2397,7 @@
 
     <!-- ChipChoiceGroup -->
     <string name="chipchoicegroup_selectall">Select All</string>
+
+    <string name="touch_again_to_exit">Please touch again to exit</string>
 
 </resources>

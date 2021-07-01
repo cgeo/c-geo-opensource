@@ -6,6 +6,7 @@ import cgeo.geocaching.R;
 import cgeo.geocaching.SearchResult;
 import cgeo.geocaching.connector.ConnectorFactory;
 import cgeo.geocaching.connector.IConnector;
+import cgeo.geocaching.connector.capability.ILogin;
 import cgeo.geocaching.connector.gc.Tile;
 import cgeo.geocaching.connector.internal.InternalConnector;
 import cgeo.geocaching.enumerations.CacheSize;
@@ -3331,7 +3332,7 @@ public class DataStore {
     }
 
     // get number of offline founds for a specific connector
-    public static int getFoundsOffline (final String serviceName) {
+    public static int getFoundsOffline (final ILogin connector) {
         int counter = 0;
 
         try {
@@ -3340,7 +3341,7 @@ public class DataStore {
             final Set<String> geocodes = cursorToColl(cursor, new HashSet<>(), GET_STRING_0);
 
             for (String geocode : geocodes) {
-                if (ConnectorFactory.getConnector(geocode).getName() == serviceName) {
+                if (ConnectorFactory.getConnector(geocode).getName().equals(connector.getName())) {
                     counter ++;
                 }
             }

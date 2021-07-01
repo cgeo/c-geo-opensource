@@ -30,6 +30,7 @@ import cgeo.geocaching.log.LogEntry;
 import cgeo.geocaching.log.LogType;
 import cgeo.geocaching.models.Geocache;
 import cgeo.geocaching.settings.Settings;
+import cgeo.geocaching.storage.extension.FoundNumCounter;
 import cgeo.geocaching.utils.DisposableHandler;
 import cgeo.geocaching.utils.Log;
 
@@ -108,6 +109,9 @@ public class SuConnector extends AbstractConnector implements ISearchByCenter, I
         } else {
             userInfo = new UserInfo(StringUtils.EMPTY, 0, UserInfo.UserInfoStatus.NOT_SUPPORTED);
         }
+        // update cache counter
+        FoundNumCounter.getAndUpdateFoundNum(this);
+
         return userInfo.getStatus() == UserInfo.UserInfoStatus.SUCCESSFUL;
     }
 

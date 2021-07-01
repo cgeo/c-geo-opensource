@@ -140,6 +140,7 @@ import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class CacheListActivity extends AbstractListActivity implements FilteredActivity, LoaderManager.LoaderCallbacks<SearchResult> {
 
@@ -218,6 +219,18 @@ public class CacheListActivity extends AbstractListActivity implements FilteredA
     private ContentStorageActivityHelper contentStorageActivityHelper = null;
 
     private AbstractSearchLoader currentLoader;
+
+    @Override
+    public int getSelectedBottomItemId() {
+        return type.navigationMenuItem;
+    }
+
+    @Override
+    public void onNavigationItemReselected(@NotNull final MenuItem item) {
+        if (!isTaskRoot()) {
+            finish();
+        }
+    }
 
     private static class LoadCachesHandler extends WeakReferenceHandler<CacheListActivity> {
 
@@ -492,17 +505,11 @@ public class CacheListActivity extends AbstractListActivity implements FilteredA
         }
     }
 
-    public CacheListActivity() {
-        super(true);
-    }
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setTheme();
-
-        setContentView(R.layout.cacheslist_activity);
 
         this.contentStorageActivityHelper = new ContentStorageActivityHelper(this, savedInstanceState == null ? null : savedInstanceState.getBundle(STATE_CONTENT_STORAGE_ACTIVITY_HELPER))
             .addSelectActionCallback(ContentStorageActivityHelper.SelectAction.SELECT_FILE_MULTIPLE, List.class, this::importGpx);
@@ -526,6 +533,8 @@ public class CacheListActivity extends AbstractListActivity implements FilteredA
         }
 
         setTitle(title);
+
+        setContentView(R.layout.cacheslist_activity);
 
         currentCacheFilter = GeocacheFilter.loadFromSettings();
 
@@ -908,7 +917,7 @@ public class CacheListActivity extends AbstractListActivity implements FilteredA
             adapter.invertSelection();
             invalidateOptionsMenuCompatible();
         } else if (menuItem == R.id.menu_filter_legacy) {
-            showLegacyFilterMenu(null);
+            FilterActivity.selectFilter(this);
         } else if (menuItem == R.id.menu_filter) {
             showFilterMenu(null);
         } else if (menuItem == R.id.menu_import_web) {
@@ -1009,17 +1018,6 @@ public class CacheListActivity extends AbstractListActivity implements FilteredA
             progress.show(CacheListActivity.this, null, res.getString(R.string.caches_clear_offlinelogs_progress), true, clearOfflineLogsHandler.disposeMessage());
             clearOfflineLogs(clearOfflineLogsHandler, adapter.getCheckedOrAllCaches());
         });
-    }
-
-    public void showLegacyFilterMenu(final View view) {
-        if (view != null && Settings.getCacheType() != CacheType.ALL) {
-            Dialogs.selectGlobalTypeFilter(this, cacheType -> {
-                refreshCurrentList();
-                prepareFilterBar();
-            });
-        } else {
-            FilterActivity.selectFilter(this);
-        }
     }
 
     /**
@@ -1721,6 +1719,7 @@ public class CacheListActivity extends AbstractListActivity implements FilteredA
         // apply filter settings (if there's a filter)
         final SearchResult searchToUse = getFilteredSearch();
         DefaultMap.startActivitySearch(this, searchToUse, title, listId);
+        ActivityMixin.overrideTransitionToFade(this);
     }
 
     private void refreshCurrentList() {
