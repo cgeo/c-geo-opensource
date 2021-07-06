@@ -1581,9 +1581,6 @@
     <string name="search_kw">Keywords</string>
     <string name="search_kw_prefill">Keyword</string>
     <string name="search_kw_button">Search by keyword</string>
-    <string name="search_fbu">Found by</string>
-    <string name="search_fbu_prefill">User name</string>
-    <string name="search_fbu_button">Search by user name</string>
     <string name="search_hbu">Hidden by</string>
     <string name="search_hbu_prefill">Owner</string>
     <string name="search_hbu_button">Search by owner name</string>
